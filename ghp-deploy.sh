@@ -12,7 +12,7 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
     # Create the branch name
     branch_name="gh-pages-$timestamp"
 
-    mv build/ doc/
+    mv build/ docs/
 
     # Add all changes to git
     git add .
@@ -40,6 +40,8 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
 
     # Delete the branch from the remote repository
     git push origin --delete $branch_name
+
+    rm -rf docs/
 
 else
     echo "This is not a git repository. The script will not run."
