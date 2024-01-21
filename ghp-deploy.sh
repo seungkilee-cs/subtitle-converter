@@ -9,9 +9,10 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
     # Get the current timestamp
     timestamp=$(date +"%Y-%m-%d_%H_%M_%S")
 
-    # Create the branch name
+    # Create a temporary branch name
     branch_name="gh-pages-$timestamp"
 
+    # Change build directory name to docs for gh-pages
     mv build/ docs/
 
     # Add all changes to git
@@ -41,6 +42,7 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
     # Delete the branch from the remote repository
     git push origin --delete $branch_name
 
+    # remove docs/ for later build
     rm -rf docs/
 
 else

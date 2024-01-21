@@ -1,45 +1,43 @@
 import React, { useState } from 'react';
+import './App.css';
 
-function App() {
+const App = () => {
   const [files, setFiles] = useState([]);
 
-  const handleFileChange = (e) => {
-    setFiles(e.target.files);
-  }
+  const handleFileChange = (e) => setFiles(e.target.files);
 
-  const handleConvert = () => {
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        const convertedContent = convertSmiToSrt(content); // Placeholder function
-        downloadFile(file.name.replace('.smi', '.srt'), convertedContent);
-      };
-      reader.readAsText(file);
-    });
-  }
+  const handleConvert = () => Array.from(files).forEach(convertAndDownloadFile);
 
-  const convertSmiToSrt = (content) => {
-    // Placeholder function. Actual implementation would go here.
-    return content;
-  }
+  const convertAndDownloadFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => downloadConvertedFile(file, e.target.result);
+    reader.readAsText(file);
+  };
+
+  const downloadConvertedFile = (file, content) => {
+    const convertedContent = convertSmiToSrt(content);
+    downloadFile(file.name.replace('.smi', '.srt'), convertedContent);
+  };
+
+  const convertSmiToSrt = (content) => content; // Placeholder function. Actual implementation would go here.
 
   const downloadFile = (filename, content) => {
     const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
     element.setAttribute('download', filename);
-    element.style.display = 'none';
+    
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-  }
+  };
 
   return (
     <div className="App">
-      <input type="file" multiple onChange={handleFileChange} />
-      <button onClick={handleConvert}>Convert</button>
+      <h1 className="title">Subtitle Converter</h1>
+      <input type="file" multiple onChange={handleFileChange} className="file-input"/>
+      <button onClick={handleConvert} className="convert-button">Convert</button>
     </div>
   );
-}
+};
 
 export default App;
