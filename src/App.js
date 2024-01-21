@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [files, setFiles] = useState([]);
+
+  const handleFileChange = (e) => {
+    setFiles(e.target.files);
+  }
+
+  const handleConvert = () => {
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        const convertedContent = convertSmiToSrt(content); // Placeholder function
+        downloadFile(file.name.replace('.smi', '.srt'), convertedContent);
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  const convertSmiToSrt = (content) => {
+    // Placeholder function. Actual implementation would go here.
+    return content;
+  }
+
+  const downloadFile = (filename, content) => {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="file" multiple onChange={handleFileChange} />
+      <button onClick={handleConvert}>Convert</button>
     </div>
   );
 }
