@@ -45,6 +45,8 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
     # remove docs/ for later build
     rm -rf docs/
 
+    git checkout master
+
 else
     echo "This is not a git repository. The script will not run."
 fi
