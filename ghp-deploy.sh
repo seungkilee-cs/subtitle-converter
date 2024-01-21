@@ -10,7 +10,9 @@ if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
     timestamp=$(date +"%Y-%m-%d_%H_%M_%S")
 
     # Create the branch name
-    branch_name="Deploy-$timestamp"
+    branch_name="gh-pages-$timestamp"
+
+    mv build/ doc/
 
     # Add all changes to git
     git add .
